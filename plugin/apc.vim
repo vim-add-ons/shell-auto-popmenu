@@ -33,6 +33,7 @@ function! s:meets_keyword(context)
 	if g:apc_min_length <= 0
 		return 0
 	endif
+	return 1
 	let matches = matchlist(a:context, '\(\k\{' . g:apc_min_length . ',}\)$')
 	if empty(matches)
 		return 0
