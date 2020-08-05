@@ -6,6 +6,10 @@ with patches that make it specifically suited for the [**Zshell Omni
 Completion**](https://github.com/zphere-zsh/zsh-omni-completion) for Vim. It
 also contains several bugfixes to make it run smoothly.
 
+Basically, the aim of this plugin is to make the Vim completion popup menu
+constantly, automatically active and completing the Zshell [**omni
+completion**](https://github.com/zphere-zsh/zsh-omni-completion).
+
 ## Usage
 
 That's all you need:
