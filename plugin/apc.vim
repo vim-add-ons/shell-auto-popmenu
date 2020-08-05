@@ -19,12 +19,14 @@
 
 let g:apc_enable_ft = get(g:, 'apc_enable_ft', {})    " enable filetypes
 let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1)   " remap tab
-let g:apc_min_length = get(g:, 'apc_min_length', 2)   " minimal length to open popup
+let g:apc_min_length = get(g:, 'apc_min_length', 1)   " minimal length to open popup
 let g:apc_key_ignore = get(g:, 'apc_key_ignore', [])  " ignore keywords
 
 " get word before cursor
 function! s:get_context()
-	return strpart(getline('.'), 0, col('.') - 1)
+	let str1 = strpart(getline('.'), 0, col('.'))
+	let str2 = strpart(b:apc_line, 0, b:apc_curscol)
+	return len(str1) > len(str2) ? str1 : str2
 endfunc
 
 function! s:meets_keyword(context)
@@ -65,12 +67,17 @@ function! s:feed_popup()
 	if &bt != '' || enable == 0 || &paste
 		return -1
 	endif
+	" Remember before it'll start to be trimmed down by Vim… (somewhat a long
+	" story…)
+	let b:apc_line = getline(".")
+	let b:apc_curscol = col(".")
+
 	let x = col('.') - 1
 	let y = line('.') - 1
 	if pumvisible()
 		let context = s:get_context()
 		if s:meets_keyword(context) == 0
-			call feedkeys("\<c-e>", 'n')
+			call feedkeys("\<c-e>", '')
 		endif
 		let b:apc_lastx = x
 		let b:apc_lasty = y
@@ -85,7 +92,7 @@ function! s:feed_popup()
 	endif
 	let context = s:get_context()
 	if s:meets_keyword(context)
-		silent! call feedkeys("\<c-n>", 'n')
+		silent! call feedkeys("\<c-x>\<c-o>", 'n')
 		let b:apc_lastx = x
 		let b:apc_lasty = y
 		let b:apc_tick = b:changedtick
@@ -104,15 +111,15 @@ endfunc
 function! s:apc_enable()
 	call s:apc_disable()
 	augroup ApcEventGroup
-		au!
+		au! CursorMovedI <buffer> 
 		au CursorMovedI <buffer> nested call s:feed_popup()
 		au CompleteDone <buffer> call s:complete_done()
 	augroup END
 	let b:apc_init_autocmd = 1
 	if g:apc_enable_tab
 		inoremap <silent><buffer><expr> <tab>
-					\ pumvisible()? "\<c-n>" :
-					\ <SID>check_back_space() ? "\<tab>" : "\<c-n>"
+					\ pumvisible()? "\<c-x>\<c-o>" :
+					\ <SID>check_back_space() ? "\<tab>" : "\<c-x>\<c-o>"
 		inoremap <silent><buffer><expr> <s-tab>
 					\ pumvisible()? "\<c-p>" : "\<s-tab>"
 		let b:apc_init_tab = 1
@@ -130,7 +137,7 @@ endfunc
 function! s:apc_disable()
 	if get(b:, 'apc_init_autocmd', 0)
 		augroup ApcEventGroup
-			au! 
+			au! CursorMovedI <buffer> 
 		augroup END
 	endif
 	if get(b:, 'apc_init_tab', 0)
@@ -160,6 +167,8 @@ function! s:apc_check_init()
 		ApcEnable
 	elseif &bt == '' && get(g:apc_enable_ft, '*', 0) != 0
 		ApcEnable
+	elseif &ft == 'zsh' && get(g:apc_enable_ft, 'zsh', 1) != 0
+		ApcEnable
 	endif
 endfunc
 
@@ -168,7 +177,6 @@ command! -nargs=0 ApcEnable call s:apc_enable()
 command! -nargs=0 ApcDisable call s:apc_disable()
 
 augroup ApcInitGroup
-	au!
 	au FileType * call s:apc_check_init()
 augroup END
 
