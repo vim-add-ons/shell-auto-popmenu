@@ -177,6 +177,10 @@ function! s:apc_check_init()
 		ApcEnable
 	elseif &ft == 'zsh' && get(g:apc_enable_ft, 'zsh', 1) != 0
 		ApcEnable
+	elseif &ft == 'bash' && get(g:apc_enable_ft, 'bash', 1) != 0
+		ApcEnable
+	elseif &ft == 'sh' && get(g:apc_enable_ft, 'sh', 1) != 0
+		ApcEnable
 	endif
 endfunc
 
