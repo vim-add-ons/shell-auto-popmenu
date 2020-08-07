@@ -30,6 +30,9 @@ let g:apc_enable_ft = { 'zsh': 0 }
 
 " If you don't like the default from-single character completing
 let g:apc_min_length = 2
+
+" If you want only TAB completing (auto auto pop-menu)
+let g:apc_enable_auto_popmenu = 0
 ```
 
 ## Commands
