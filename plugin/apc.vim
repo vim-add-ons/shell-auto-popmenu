@@ -19,13 +19,18 @@
 
 let g:apc_enable_ft = get(g:, 'apc_enable_ft', {})    " enable filetypes
 let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1)   " remap tab
+let g:apc_enable_auto_popmenu = get(g:, 'apc_enable_auto_popmenu', 1)   " remap tab
 let g:apc_min_length = get(g:, 'apc_min_length', 1)   " minimal length to open popup
 let g:apc_key_ignore = get(g:, 'apc_key_ignore', [])  " ignore keywords
 
 " get word before cursor
 function! s:get_context()
 	let str1 = strpart(getline('.'), 0, col('.'))
-	let str2 = strpart(b:apc_line, 0, b:apc_curscol)
+	if exists( 'b:apc_line' )
+		let str2 = strpart(b:apc_line, 0, b:apc_curscol)
+	else
+		let str2 = ""
+	endif
 	return len(str1) > len(str2) ? str1 : str2
 endfunc
 
@@ -111,11 +116,13 @@ endfunc
 " enable apc
 function! s:apc_enable()
 	call s:apc_disable()
-	augroup ApcEventGroup
-		au! CursorMovedI <buffer> 
-		au CursorMovedI <buffer> nested call s:feed_popup()
-		au CompleteDone <buffer> call s:complete_done()
-	augroup END
+	if g:apc_enable_auto_popmenu
+		augroup ApcEventGroup
+			au! CursorMovedI <buffer> 
+			au CursorMovedI <buffer> nested call s:feed_popup()
+			au CompleteDone <buffer> call s:complete_done()
+		augroup END
+	endif
 	let b:apc_init_autocmd = 1
 	if g:apc_enable_tab
 		inoremap <silent><buffer><expr> <tab>

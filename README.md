@@ -1,14 +1,14 @@
-## zsh-auto-popmenu — What Is It ?
+## shell-auto-popmenu — What Is It ?
 
 It's a fork of the
 [skywind3000/vim-auto-popmenu](https://github.com/skywind3000/vim-auto-popmenu)
-with patches that make it specifically suited for the [**Zshell Omni
-Completion**](https://github.com/zphere-zsh/zsh-omni-completion) for Vim. It
+with patches that make it specifically suited for the [**Shell Omni
+Completion**](https://github.com/zphere-zsh/shell-omni-completion) for Vim. It
 also contains several bugfixes to make it run smoothly.
 
 Basically, the aim of this plugin is to make the Vim completion popup menu
 constantly, automatically active and completing the Zshell [**omni
-completion**](https://github.com/zphere-zsh/zsh-omni-completion).
+completion**](https://github.com/zphere-zsh/shell-omni-completion).
 
 ## Usage
 
@@ -22,7 +22,7 @@ set completeopt=menu,menuone,noinsert
 set shortmess+=c
 
 " A command of your Vim plugin manager that'll source the
-" zphere-zsh/zsh-auto-popmenu plugin
+" zphere-zsh/shell-auto-popmenu plugin
 … … …
 
 " If you want an on-demand toggling of the plugin
