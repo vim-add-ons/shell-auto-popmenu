@@ -35,10 +35,10 @@ function! s:get_context()
 endfunc
 
 function! s:meets_keyword(context)
+	return 1
 	if g:apc_min_length <= 0
 		return 0
 	endif
-	return 1
 	let matches = matchlist(a:context, '\(\k\{' . g:apc_min_length . ',}\)$')
 	if empty(matches)
 		return 0
@@ -73,6 +73,7 @@ function! s:feed_popup()
 	if &bt != '' || enable == 0 || &paste
 		return -1
 	endif
+	"echom "APC :: s:feed_popup / b:apc_tick: " . tick . " / b:changedtick: " . b:changedtick
 	" Remember before it'll start to be trimmed down by Vim… (somewhat a long
 	" story…)
 	let b:apc_line = getline(".")
@@ -83,26 +84,32 @@ function! s:feed_popup()
 	if pumvisible()
 		let context = s:get_context()
 		if s:meets_keyword(context) == 0
+			"echom "APC :: call feedkeys(\"\<c-e>\", '')"
 			call feedkeys("\<c-e>", '')
 		endif
 		let b:apc_lastx = x
 		let b:apc_lasty = y
 		let b:apc_tick = b:changedtick
+		"echom "APC :: s:feedPopup →→ pumvisible() →→ return 0"
 		return 0
-	elseif lastx == x && lasty == y
+	elseif lastx == x && lasty == y && (b:changedtick <= tick + 2 || b:changedtick == tick+10)
+		"echom "APC :: lastx == x && lasty == y →→ -2"
 		return -2
 	elseif b:changedtick == tick
+		"echom "APC :: b:changedtick == tick →→ -3"
 		let lastx = x
 		let lasty = y
 		return -3
 	endif
 	let context = s:get_context()
 	if s:meets_keyword(context)
+		"echom "APC :: call feedkeys(\"\<c-x>\<c-o>\", 'n')"
 		silent! call feedkeys("\<c-x>\<c-o>", 'n')
-		let b:apc_lastx = x
-		let b:apc_lasty = y
-		let b:apc_tick = b:changedtick
 	endif
+	"echom "APC :: s:feedPopup →→ x:".x.",lx:".b:apc_lastx.", y:".y.",ly:".b:apc_lasty. " →→ 0"
+	let b:apc_lastx = x
+	let b:apc_lasty = y
+	let b:apc_tick = b:changedtick
 	return 0
 endfunc
 
