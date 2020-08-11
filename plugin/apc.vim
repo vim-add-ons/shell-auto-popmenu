@@ -31,7 +31,7 @@ function! s:get_context()
 endfunc
 
 function! s:meets_keyword(context)
-	return 1
+	return a:context !~ "^[[:space:]]*$"
 	if g:apc_min_length <= 0
 		return 0
 	endif
