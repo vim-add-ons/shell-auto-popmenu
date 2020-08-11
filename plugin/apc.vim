@@ -72,6 +72,7 @@ function! s:feed_popup()
 	"echom "APC :: s:feed_popup / b:apc_tick: " . tick . " / b:changedtick: " . b:changedtick
 	" Remember before it'll start to be trimmed down by Vim… (somewhat a long
 	" story…)
+	let prev_line = get(b:, 'apc_line', '')
 	let b:apc_line = getline(".")
 	let b:apc_curscol = col(".")
 
@@ -88,7 +89,7 @@ function! s:feed_popup()
 		let b:apc_tick = b:changedtick
 		"echom "APC :: s:feedPopup →→ pumvisible() →→ return 0"
 		return 0
-	elseif lastx == x && lasty == y
+	elseif lastx == x && lasty == y && b:apc_line == prev_line
 		"echom "APC :: lastx == x && lasty == y →→ -2"
 		return -2
 	elseif b:changedtick == tick
