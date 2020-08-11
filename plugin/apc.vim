@@ -175,12 +175,25 @@ function! s:apc_check_init()
 		ApcEnable
 	elseif &bt == '' && get(g:apc_enable_ft, '*', 0) != 0
 		ApcEnable
-	elseif &ft == 'zsh' && get(g:apc_enable_ft, 'zsh', 1) != 0
-		ApcEnable
-	elseif &ft == 'bash' && get(g:apc_enable_ft, 'bash', 1) != 0
-		ApcEnable
-	elseif &ft == 'sh' && get(g:apc_enable_ft, 'sh', 1) != 0
-		ApcEnable
+	else
+		let enabled = 0
+		if exists('g:shell_omni_completion_loaded')
+			if &ft == 'zsh' && get(g:apc_enable_ft, 'zsh', 1) != 0
+				let enabled = 1
+				ApcEnable
+			elseif &ft == 'bash' && get(g:apc_enable_ft, 'bash', 1) != 0
+				let enabled = 1
+				ApcEnable
+			elseif &ft == 'sh' && get(g:apc_enable_ft, 'sh', 1) != 0
+				let enabled = 1
+				ApcEnable
+			endif
+		endif
+		if !enabled && exists('g:vichord_omni_completion_loaded')
+			if &ft == 'vim' && get(g:apc_enable_ft, 'vim', 1) != 0
+				ApcEnable
+			endif
+		endif
 	endif
 endfunc
 
