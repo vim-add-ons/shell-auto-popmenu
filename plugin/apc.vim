@@ -26,11 +26,7 @@ let g:apc_key_ignore = get(g:, 'apc_key_ignore', [])  " ignore keywords
 " get word before cursor
 function! s:get_context()
 	let str1 = strpart(getline('.'), 0, col('.'))
-	if exists( 'b:apc_line' )
-		let str2 = strpart(b:apc_line, 0, b:apc_curscol)
-	else
-		let str2 = ""
-	endif
+	let str2 = strpart(get(b:, 'apc_line', ''), 0, get(b:,'apc_curscol', col('.')))
 	return len(str1) > len(str2) ? str1 : str2
 endfunc
 
