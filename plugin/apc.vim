@@ -92,7 +92,7 @@ function! s:feed_popup()
 		let b:apc_tick = b:changedtick
 		"echom "APC :: s:feedPopup →→ pumvisible() →→ return 0"
 		return 0
-	elseif lastx == x && lasty == y && (b:changedtick <= tick + 2 || b:changedtick == tick+10)
+	elseif lastx == x && lasty == y
 		"echom "APC :: lastx == x && lasty == y →→ -2"
 		return -2
 	elseif b:changedtick == tick
