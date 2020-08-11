@@ -106,7 +106,7 @@ function! s:feed_popup()
 		"echom "APC :: call feedkeys(\"\<c-x>\<c-o>\", 'n')"
 		silent! call feedkeys("\<c-x>\<c-o>", 'n')
 	endif
-	"echom "APC :: s:feedPopup →→ x:".x.",lx:".b:apc_lastx.", y:".y.",ly:".b:apc_lasty. " →→ 0"
+	"echom "APC :: s:feedPopup →→ x:".x.",lx:".lastx.", y:".y.",ly:".lasty. " →→ 0"
 	let b:apc_lastx = x
 	let b:apc_lasty = y
 	let b:apc_tick = b:changedtick
