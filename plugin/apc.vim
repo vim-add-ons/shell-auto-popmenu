@@ -209,3 +209,4 @@ augroup ApcInitGroup
 	au FileType * call s:apc_check_init()
 augroup END
 
+let g:apc_loaded = 1
