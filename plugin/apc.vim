@@ -202,8 +202,8 @@ function! s:apc_check_init()
 endfunc
 
 " commands & autocmd
-command! -nargs=0 ApcEnable call s:apc_enable()
-command! -nargs=0 ApcDisable call s:apc_disable()
+command! -nargs=0 -bar ApcEnable call s:apc_enable()
+command! -nargs=0 -bar ApcDisable call s:apc_disable()
 
 augroup ApcInitGroup
 	au FileType * call s:apc_check_init()
